@@ -17,7 +17,7 @@ jobs:
       type: DefaultInterpreter
       commands: |
         mkdir -p build
-        /home/onedev/.vlang/v -prod -cc /usr/bin/gcc -o build/ps2_api .
+        v -prod -cc /usr/bin/gcc -o build/ps2_api .
     useTTY: true
     condition: SUCCESSFUL
     optional: false
