@@ -1,34 +1,36 @@
-version: 40
+version: 43
 jobs:
 - name: V Build
-  jobExecutor: builder
   steps:
-  - !CheckoutStep
+  - type: CheckoutStep
     name: checkout code
-    cloneCredential: !DefaultCredential {}
+    cloneCredential:
+      type: DefaultCredential
     withLfs: false
     withSubmodules: false
     condition: SUCCESSFUL
     optional: false
-  - !CommandStep
+  - type: CommandStep
     name: V Prod Build
     runInContainer: false
-    interpreter: !DefaultInterpreter
+    interpreter:
+      type: DefaultInterpreter
       commands: |
         mkdir -p build
         /home/onedev/.vlang/v -prod -cc /usr/bin/gcc -o build/ps2_api .
     useTTY: true
     condition: SUCCESSFUL
     optional: false
-  - !PublishArtifactStep
+  - type: PublishArtifactStep
     name: Publish bin
     sourcePath: build/
     artifacts: '*'
     condition: SUCCESSFUL
     optional: false
   triggers:
-  - !BranchUpdateTrigger {}
-  - !PullRequestUpdateTrigger {}
+  - type: BranchUpdateTrigger
+    userMatch: anyone
+  - type: PullRequestUpdateTrigger
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
