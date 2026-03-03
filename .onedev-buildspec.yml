@@ -27,6 +27,7 @@ jobs:
     artifacts: '*'
     condition: SUCCESSFUL
     optional: false
+  jobExecutor: Builder
   triggers:
   - type: BranchUpdateTrigger
     userMatch: anyone
