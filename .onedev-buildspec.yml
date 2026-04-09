@@ -30,8 +30,9 @@ jobs:
   jobExecutor: Builder
   triggers:
   - type: BranchUpdateTrigger
+    branches: master
     userMatch: anyone
-  - type: PullRequestUpdateTrigger
+    projects: oplnova_vapi
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
