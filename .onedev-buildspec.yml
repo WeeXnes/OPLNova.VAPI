@@ -26,7 +26,7 @@ jobs:
     optional: false
   - type: PublishArtifactStep
     name: Publish bin
-    sourcePath: oplnova_vapi.zip
+    sourcePath: .
     artifacts: oplnova_vapi.zip
     condition: SUCCESSFUL
     optional: false
