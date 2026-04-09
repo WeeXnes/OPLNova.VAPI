@@ -17,8 +17,6 @@ jobs:
       type: DefaultInterpreter
       commands: |
         mkdir -p build temp_release
-        v -prod -cc /usr/bin/gcc -o build/ps2_api .
-        cp build/ps2_api temp_release/
         cp index.html temp_release/
         zip -r oplnova_vapi.zip temp_release/
     useTTY: true
