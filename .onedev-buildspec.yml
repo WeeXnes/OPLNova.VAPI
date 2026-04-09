@@ -16,15 +16,20 @@ jobs:
     interpreter:
       type: DefaultInterpreter
       commands: |
-        mkdir -p build
+        mkdir -p build temp_release
         v -prod -cc /usr/bin/gcc -o build/ps2_api .
+        cp build/ps2_api temp_release/
+        cp index.html temp_release/
+        cp contact.html temp_release/
+        cp -r db/ temp_release/db/
+        zip -r oplnova_vapi.zip temp_release/
     useTTY: true
     condition: SUCCESSFUL
     optional: false
   - type: PublishArtifactStep
     name: Publish bin
-    sourcePath: build/
-    artifacts: '*'
+    sourcePath: oplnova_vapi.zip
+    artifacts: oplnova_vapi.zip
     condition: SUCCESSFUL
     optional: false
   jobExecutor: Builder
