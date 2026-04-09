@@ -18,7 +18,7 @@ jobs:
       commands: |
         mkdir -p build temp_release
         cp index.html temp_release/
-        zip -r oplnova_vapi.zip temp_release/
+        zip -r oplnova_vapi.zip temp_release/*
     useTTY: true
     condition: SUCCESSFUL
     optional: false
