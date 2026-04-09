@@ -18,6 +18,10 @@ To download and prepare the required game data and artwork, run:
 ```bash
 bash setup_db.sh
 ```
+> [!NOTE]
+> The database download is retrieved from Archive.org and may take a **significant amount of time** depending on your network speed.
+
+![Preview](Images/download.png)
 
 ### Installation
 
