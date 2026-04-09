@@ -18,11 +18,18 @@ jobs:
       commands: |
         mkdir -p build temp_release
         v -prod -cc /usr/bin/gcc -o build/ps2_api .
+    useTTY: true
+    condition: SUCCESSFUL
+    optional: false
+  - type: CommandStep
+    name: Copy Files to tmp dir
+    runInContainer: false
+    interpreter:
+      type: DefaultInterpreter
+      commands: |
         cp build/ps2_api temp_release/
         cp index.html temp_release/
-        cd temp_release
-        zip -r ../oplnova_vapi.zip .
-        cd ..
+        cp setup_db.sh temp_release/
     useTTY: true
     condition: SUCCESSFUL
     optional: false
@@ -30,6 +37,18 @@ jobs:
     name: Publish bin
     sourcePath: .
     artifacts: oplnova_vapi.zip
+    condition: SUCCESSFUL
+    optional: false
+  - type: CommandStep
+    name: Zip artifacts
+    runInContainer: false
+    interpreter:
+      type: DefaultInterpreter
+      commands: |
+        cd temp_release
+        zip -r ../oplnova_vapi.zip .
+        cd ..
+    useTTY: true
     condition: SUCCESSFUL
     optional: false
   jobExecutor: Builder
