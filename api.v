@@ -137,9 +137,47 @@ pub fn (mut app App) art(mut ctx Context, file string) veb.Result {
 		return ctx.not_found()
 	}
 
+	// 1. Direct match: db/PS2/{file}
 	path := os.join_path('db/PS2', file)
 	if os.exists(path) {
 		return ctx.file(path)
 	}
+
+	// 2. Try alternate extensions (jpg <-> png)
+	base := file.all_before_last('.')
+	ext := file.all_after_last('.')
+	alt_ext := if ext.to_lower() == 'png' { 'jpg' } else { 'png' }
+	alt_path := os.join_path('db/PS2', '${base}.${alt_ext}')
+	if os.exists(alt_path) {
+		return ctx.file(alt_path)
+	}
+
+	// 3. Try converting between normalized (SLUS-20002) and legacy (SLUS_200.02)
+	if base.contains('_') {
+		id_part := base.all_before_last('_')
+		suffix_part := base.all_after_last('_')
+
+		if id_part.contains('-') {
+			parts := id_part.split('-')
+			if parts.len == 2 && parts[1].len == 5 {
+				legacy_id := '${parts[0]}_${parts[1][..3]}.${parts[1][3..]}'
+				for e in ['png', 'jpg'] {
+					candidate := os.join_path('db/PS2', '${legacy_id}_${suffix_part}.${e}')
+					if os.exists(candidate) {
+						return ctx.file(candidate)
+					}
+				}
+			}
+		} else {
+			norm_id := normalize_id(id_part)
+			for e in ['png', 'jpg'] {
+				candidate := os.join_path('db/PS2', '${norm_id}_${suffix_part}.${e}')
+				if os.exists(candidate) {
+					return ctx.file(candidate)
+				}
+			}
+		}
+	}
+
 	return ctx.not_found()
 }
