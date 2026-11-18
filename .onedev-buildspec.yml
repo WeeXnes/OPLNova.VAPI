@@ -1,6 +1,8 @@
-version: 43
+version: 59
 jobs:
 - name: V Build
+  executeInSandbox: false
+  jobExecutor: Builder
   steps:
   - type: CheckoutStep
     name: checkout code
@@ -14,10 +16,12 @@ jobs:
     name: V Prod Build
     runInContainer: false
     interpreter:
-      type: DefaultInterpreter
+      type: PosixInterpreter
+      shell: sh
       commands: |
         mkdir -p build temp_release
         v -prod -cc /usr/bin/gcc -o build/ps2_api .
+    runAs: 0:0
     useTTY: true
     condition: SUCCESSFUL
     optional: false
@@ -25,11 +29,13 @@ jobs:
     name: Copy Files to tmp dir
     runInContainer: false
     interpreter:
-      type: DefaultInterpreter
+      type: PosixInterpreter
+      shell: sh
       commands: |
         cp build/ps2_api temp_release/
         cp index.html temp_release/
         cp setup_db.sh temp_release/
+    runAs: 0:0
     useTTY: true
     condition: SUCCESSFUL
     optional: false
@@ -37,11 +43,13 @@ jobs:
     name: Zip artifacts
     runInContainer: false
     interpreter:
-      type: DefaultInterpreter
+      type: PosixInterpreter
+      shell: sh
       commands: |
         cd temp_release
         zip -r ../oplnova_vapi.zip .
         cd ..
+    runAs: 0:0
     useTTY: true
     condition: SUCCESSFUL
     optional: false
@@ -51,13 +59,14 @@ jobs:
     artifacts: oplnova_vapi.zip
     condition: SUCCESSFUL
     optional: false
-  jobExecutor: Builder
   triggers:
   - type: BranchUpdateTrigger
     branches: master
     userMatch: anyone
     projects: oplnova_vapi
   retryCondition: never
-  maxRetries: 3
+  maxAttempts: 4
   retryDelay: 30
+  includeUpstreamWhenRebuild: false
+  includeDownstreamWhenRebuild: false
   timeout: 14400
