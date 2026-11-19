@@ -1,50 +1,59 @@
 # OPLNova API
 
-The OPLNova API is a lightweight service written in the V programming language, designed to provide metadata and artwork support for the **OPLNova** PS2 game manager.
+Lightweight service written in V that provides game metadata and artwork for the [OPLNova](https://code.weexnes.dev/OPLNova) PS2 game manager.
+
+[![Download](https://img.shields.io/badge/download-latest-000000?style=flat-square&labelColor=1f1f1f)](https://code.weexnes.dev/oplnova_vapi/~builds)
+[![Stack](https://img.shields.io/badge/stack-V-000000?style=flat-square&labelColor=1f1f1f)](https://vlang.io/)
 
 ## Features
 
-- **Game Metadata Lookup:** Search for game titles by normalized game IDs.
-- **Artwork Serving:** Provides access to game-specific artwork stored in the server's database.
+- **Game metadata lookup:** search for game titles by normalized game IDs.
+- **Artwork serving:** access to game-specific artwork stored in the server's database.
 
-## Prerequisites
+## Requirements
 
-- The API requires a `db/` directory containing game data. This can be initialized automatically using the provided setup script.
+- A `db/` directory containing game data. It can be set up automatically with the provided setup script (see below).
 
-## Getting Started
+## Install
 
-### Database Setup
+### Database setup
+
 To download and prepare the required game data and artwork, run:
+
 ```bash
 bash setup_db.sh
 ```
+
 > [!NOTE]
-> The database download is retrieved from Archive.org and may take a **significant amount of time** depending on your network speed.
+> The database is downloaded from Archive.org and may take a **significant amount of time** depending on your network speed.
 
-![Preview](Images/download.png)
+<img src="Images/download.png" width="860" alt="Database download" />
 
-### Installation
+### Binary
 
-You can either compile the project yourself or use a pre-built binary.
+Download the latest binary from [code.weexnes.dev/oplnova_vapi/~builds](https://code.weexnes.dev/oplnova_vapi/~builds),
+or build it yourself (see [Build from source](#build-from-source)).
 
-1. **Download:** Get the latest binary from [https://code.weexnes.dev/oplnova_vapi/~builds](https://code.weexnes.dev/oplnova_vapi/~builds).
-2. **Compile:** Ensure you have the [V language](https://vlang.io/) installed.
-   ```bash
-   v run api.v
-   ```
-
-### Usage
+## Usage
 
 The API runs on port `3000` by default.
 
-#### Endpoints
+### Endpoints
 
 | Method | Endpoint | Description |
-| :--- | :--- | :--- |
+| :-- | :-- | :-- |
 | `GET` | `/` | Serves the main landing page (`index.html`). |
 | `GET` | `/contact` | Serves the contact page (`contact.html`). |
-| `GET` | `/search/:id` | Returns JSON metadata for a given game ID (e.g., `/search/SCES12345`). |
-| `GET` | `/art/:file` | Serves artwork files from `db/PS2/` (e.g., `/art/cover.png`). |
+| `GET` | `/search/:id` | Returns JSON metadata for a given game ID (e.g. `/search/SCES12345`). |
+| `GET` | `/art/:file` | Serves artwork files from `db/PS2/` (e.g. `/art/cover.png`). |
+
+## Build from source
+
+Prerequisites: the [V language](https://vlang.io/).
+
+```bash
+v run api.v
+```
 
 ## License
 
